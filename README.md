@@ -101,3 +101,8 @@ TranspositionTableEntry data structure
   flag //one of EXACT, LOWERBOUND, UPPERBOUND
   value
 ```
+Check Wikipedia for an introduction to the methods used here (archived links):
+- [Minimax algorithm](https://en.wikipedia.org/w/index.php?title=Minimax&oldid=1282084908#Combinatorial_game_theory)
+- [Negamax algorithm](https://en.wikipedia.org/w/index.php?title=Negamax&oldid=1280991606)
+- [Alpha-beta pruning](https://en.wikipedia.org/w/index.php?title=Alpha%E2%80%93beta_pruning&oldid=1283911367)
+- [Transposition table](https://en.wikipedia.org/w/index.php?title=Transposition_table&oldid=1260263170)
