@@ -24,14 +24,6 @@ jobs:
         os: [windows-latest, ubuntu-latest, macos-latest]
         build_type: [MinSizeRel]
         cpp_compiler: [clang++]
-        include:
-          - os: windows-latest
-            build_type: MinSizeRel
-            cpp_compiler: clang-cl
-        exclude:
-          - os: windows-latest
-            build_type: MinSizeRel
-            cpp_compiler: clang++
 
     steps:
     - name: Get repository files
@@ -66,5 +58,5 @@ jobs:
         name: TicTacToe-${{ matrix.os }}
         path: |
           ${{ steps.strings.outputs.build-output-dir }}/TicTacToe
-          ${{ steps.strings.outputs.build-output-dir }}/**/TicTacToe.exe
+          ${{ steps.strings.outputs.build-output-dir }}/${{ matrix.build_type }}/TicTacToe.exe
         compression-level: 9
