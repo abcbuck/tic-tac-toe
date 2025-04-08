@@ -23,7 +23,7 @@ jobs:
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
         build_type: [MinSizeRel]
-        cpp_compiler: [clang]
+        cpp_compiler: [clang++]
 
     steps:
     - uses: actions/checkout@v4
@@ -35,7 +35,9 @@ jobs:
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
 
-    - uses: ssrobins/install-cmake@v1
+    - uses: Symbitic/install-cmake@v0.1.0
+      with:
+        cmake: 4.0.0
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
