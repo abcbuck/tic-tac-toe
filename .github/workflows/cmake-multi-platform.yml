@@ -58,5 +58,5 @@ jobs:
         name: TicTacToe-${{ matrix.os }}
         path: |
           ${{ steps.strings.outputs.build-output-dir }}/TicTacToe
-          ${{ steps.strings.outputs.build-output-dir }}/${{ matrix.build_type }}/TicTacToe.exe
+          ${{ steps.strings.outputs.build-output-dir }}/**/TicTacToe.exe
         compression-level: 9
