@@ -52,11 +52,17 @@ jobs:
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
 
+    - name: Move executable to base folder on Windows
+      if: runner.os = 'Windows'
+      run: |
+        mv ${{ steps.strings.outputs.build-output-dir }}/${{ matrix.build_type }}/TicTacToe.exe ${{ steps.strings.outputs.build-output-dir }}/TicTacToe.exe
+        rmdir ${{ steps.strings.outputs.build-output-dir }}/${{ matrix.build_type }}
+
     - name: Upload executable files to repository
       uses: actions/upload-artifact@v4
       with:
         name: TicTacToe-${{ matrix.os }}
         path: |
           ${{ steps.strings.outputs.build-output-dir }}/TicTacToe
-          ${{ steps.strings.outputs.build-output-dir }}/${{ matrix.build_type }}/TicTacToe.exe
+          ${{ steps.strings.outputs.build-output-dir }}/TicTacToe.exe
         compression-level: 9
