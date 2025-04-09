@@ -1,0 +1,72 @@
+name: Compile for Windows, Linux and macOS
+
+on:
+  workflow_call:
+    inputs:
+      project-name:
+        description: 'Determines the name of the compiled executables'
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: true
+
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+        build_type: [MinSizeRel]
+        cpp_compiler: [clang++]
+
+    steps:
+    - name: Get repository files
+      uses: actions/checkout@v4
+
+    - name: Set reusable strings
+      # Turn repeated input strings (such as the build output directory) into step outputs.
+      id: strings
+      shell: bash
+      run: |
+        echo "build-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+        echo "source-dir=${{ github.workspace }}/src" >> "$GITHUB_OUTPUT"
+
+    - name: Update to the latest version of CMake
+      uses: lukka/get-cmake@v4.0.0
+
+    - name: Configure CMake
+      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required for single-configuration generators such as make.
+      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+      run: >
+        cmake -B ${{ steps.strings.outputs.build-dir }}
+        -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
+        -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+        -S ${{ steps.strings.outputs.source-dir }}
+
+    - name: Build
+      # Build the program with the given configuration. --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
+      run: cmake --build ${{ steps.strings.outputs.build-dir }} --config ${{ matrix.build_type }}
+
+    - name: Get CMake project name on Windows
+      if: runner.os = 'Windows'
+      # need to use ${{ github.workspace }}\src instead of ${{ steps.strings.outputs.source-dir }} because Windows findstr doesn't recognize forward slashes for paths
+      run: >
+        for /f "usebackq tokens=2 delims=( "
+        %i in (`findstr "project(" "${{ github.workspace }}\src\CMakeLists.txt"`)
+        do @echo %i
+
+    - name: Move executable to base folder on Windows
+      if: runner.os = 'Windows'
+      run: |
+        mv ${{ steps.strings.outputs.build-dir }}/${{ matrix.build_type }}/TicTacToe.exe ${{ steps.strings.outputs.build-dir }}/TicTacToe.exe
+        rmdir ${{ steps.strings.outputs.build-dir }}/${{ matrix.build_type }}
+
+    - name: Upload executable files to repository
+      uses: actions/upload-artifact@v4
+      with:
+        name: TicTacToe-${{ matrix.os }}
+        path: |
+          ${{ steps.strings.outputs.build-dir }}/TicTacToe
+          ${{ steps.strings.outputs.build-dir }}/TicTacToe.exe
+        compression-level: 9
