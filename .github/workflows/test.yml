@@ -13,20 +13,16 @@ jobs:
     - name: Get repository files
       uses: actions/checkout@v4
 
-    - name: View root structure
-      id: root
+    - name: View currend directory
+      id: pwd
       shell: bash
-      run: |
-        cd /
-        ls
-        cd /mnt
-        ls
+      run: pwd
     
     - name: Set project name as reusable string
       id: strings
       shell: bash
       run: |
-        echo "project-name=`echo '${{ github.workspace }}/src/CMakeLists.txt' | perl -pe 's!\\!\/!g' | grep 'project(' | perl -pe 's/.*\((.*?)\s.*/$1/'`" >> "$GITHUB_OUTPUT"
+        echo "project-name=`echo '${{ github.workspace }}/src/CMakeLists.txt' | perl -pe 's!\\!\/!g' | cat | grep 'project(' | perl -pe 's/.*\((.*?)\s.*/$1/'`" >> "$GITHUB_OUTPUT"
 
     - name: Print project name
       run: echo ${{ steps.strings.outputs.project-name }}
