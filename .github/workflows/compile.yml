@@ -2,11 +2,7 @@ name: Compile for Windows, Linux and macOS
 
 on:
   workflow_call:
-    inputs:
-      project-name:
-        description: 'Determines the name of the compiled executables'
-        required: true
-        type: string
+  workflow_dispatch:
 
 jobs:
   build:
