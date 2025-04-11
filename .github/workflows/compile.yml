@@ -31,6 +31,7 @@ jobs:
       run: |
         echo "build-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
         echo "source-dir=${{ github.workspace }}/src" >> "$GITHUB_OUTPUT"
+        echo "project-name=`grep 'project(' ${{ github.workspace }}/src/CMakeLists.txt | perl -pe 's/.*\((.*?)\s.*/$1/'`" >> "$GITHUB_OUTPUT"
 
     - name: Update to the latest version of CMake
       uses: lukka/get-cmake@v4.0.0
@@ -48,17 +49,24 @@ jobs:
       # Build the program with the given configuration. --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       run: cmake --build ${{ steps.strings.outputs.build-dir }} --config ${{ matrix.build_type }}
 
+    - name: Get CMake project name
+      shell: bash
+      run: >
+        for /f "usebackq tokens=2 delims=( "
+        %i in (`findstr "project(" "${{ github.workspace }}\src\CMakeLists.txt"`)
+        do @echo %i
+
     - name: Move executable to base folder on Windows
       if: runner.os == 'Windows'
       run: |
-        mv ${{ steps.strings.outputs.build-dir }}/${{ matrix.build_type }}/TicTacToe.exe ${{ steps.strings.outputs.build-dir }}/TicTacToe.exe
+        mv ${{ steps.strings.outputs.build-dir }}/${{ matrix.build_type }}/${{ steps.strings.outputs.project-name }}.exe ${{ steps.strings.outputs.build-dir }}/${{ steps.strings.outputs.project-name }}.exe
         rmdir ${{ steps.strings.outputs.build-dir }}/${{ matrix.build_type }}
 
     - name: Upload executable files to repository
       uses: actions/upload-artifact@v4
       with:
-        name: TicTacToe-${{ matrix.os }}
+        name: ${{ steps.strings.outputs.project-name }}-${{ matrix.os }}
         path: |
-          ${{ steps.strings.outputs.build-dir }}/TicTacToe
-          ${{ steps.strings.outputs.build-dir }}/TicTacToe.exe
+          ${{ steps.strings.outputs.build-dir }}/${{ steps.strings.outputs.project-name }}
+          ${{ steps.strings.outputs.build-dir }}/${{ steps.strings.outputs.project-name }}.exe
         compression-level: 9
