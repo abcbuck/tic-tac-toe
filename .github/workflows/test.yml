@@ -1,0 +1,23 @@
+name: Manual testing procedure
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    strategy:
+      fail-fast: true
+
+    steps:
+    - name: Get repository files
+      uses: actions/checkout@v4
+
+    - name: Set project name as reusable string
+      id: strings
+      shell: bash
+      run: |
+        echo "project-name=`grep 'project(' ${{ github.workspace }}/src/CMakeLists.txt | perl -pe 's/.*\((.*?)\s.*/$1/'`" >> "$GITHUB_OUTPUT"
+
+    - name: Print project name
+      run: echo ${{ steps.strings.outputs.project-name }}
