@@ -17,7 +17,7 @@ jobs:
       id: strings
       shell: bash
       run: |
-        echo "project-name=`grep 'project(' ${{ github.workspace }}/src/CMakeLists.txt | perl -pe 's/.*\((.*?)\s.*/$1/'`" >> "$GITHUB_OUTPUT"
+        echo "project-name=`echo '${{ github.workspace }}/src/CMakeLists.txt' | perl -pe 's!\\!\/!g' | grep 'project(' | perl -pe 's/.*\((.*?)\s.*/$1/'`" >> "$GITHUB_OUTPUT"
 
     - name: Print project name
       run: echo ${{ steps.strings.outputs.project-name }}
