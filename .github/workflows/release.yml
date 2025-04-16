@@ -15,13 +15,20 @@ jobs:
     - name: Get compilation artifacts
       uses: actions/download-artifact@v4
 
+    - name: Show file structure for debugging
+      run: |
+        ls
+        cd ${{ needs.compile.outputs.project-name }}-windows-latest
+        echo 'Changed directory.'
+        ls
+
     - name: Create release
       uses: softprops/action-gh-release@v2
       with:
         name: Executables
         tag_name: v1.0.0
         files: |
-          ${{ needs.compile.outputs.project-name }}-windows-latest
-          ${{ needs.compile.outputs.project-name }}-ubuntu-latest
-          ${{ needs.compile.outputs.project-name }}-macos-latest
+          ${{ needs.compile.outputs.project-name }}-windows-latest/${{ needs.compile.outputs.project-name }}.exe
+          ${{ needs.compile.outputs.project-name }}-ubuntu-latest/${{ needs.compile.outputs.project-name }}
+          ${{ needs.compile.outputs.project-name }}-macos-latest/${{ needs.compile.outputs.project-name }}
         make_latest: true
