@@ -20,7 +20,7 @@ jobs:
       with:
         name: Executables
         tag_name: v1.0.0
-        files:
+        files: |
           ${{ needs.compile.outputs.project-name }}-windows-latest.zip
           ${{ needs.compile.outputs.project-name }}-ubuntu-latest.zip
           ${{ needs.compile.outputs.project-name }}-macos-latest.zip
