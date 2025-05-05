@@ -4,48 +4,24 @@
 #include "utility.h"
 
 #include <iostream>
+#include <print>
 
 void showBoard(short boardState, char symbols[3]) {
-  /*
-  ════╦═══╦═══╦═══╗
-  3   ║   ║   ║   ║
-  ════╬═══╬═══╬═══╣
-  2   ║   ║ X ║ X ║
-  ════╬═══╬═══╬═══╣
-  1   ║ O ║   ║   ║
-  ════╬═══╬═══╬═══╣
-      ║   ║   ║   ║
-      ║ A ║ B ║ C ║
-  */
-  //const char tl = static_cast<char>(201); //╔ top left
-    const char tr = static_cast<char>(187); //╗ top right
-  //const char br = static_cast<char>(188); //╝ bottom right
-  //const char bl = static_cast<char>(200); //╚ bottom left
-    const char  h = static_cast<char>(205); //═ horizontal
-    const char  v = static_cast<char>(186); //║ vertical
-    const char  t = static_cast<char>(203); //╦ top
-    const char  r = static_cast<char>(185); //╣ right
-  //const char  b = static_cast<char>(202); //╩ bottom
-  //const char  l = static_cast<char>(204); //╠ left
-    const char  m = static_cast<char>(206); //╬ middle
-  
-  //need to call std::cout multiple times to invoke the correct sequencing of changes to the boardState variable
-  std::cout << h << h << h << h << t <<      h      <<      h      <<      h      << t <<      h      <<      h      <<      h      << t <<      h      <<      h      <<      h      << tr << std::endl
-            <<      "3   "      << v <<  ' '  <<  symbols[boardState%3];
-                                                              std::cout <<  ' '  << v <<  ' ' << symbols[(boardState/=3)%3];
-                                                                                                                   std::cout << ' ' << v << ' ' <<  symbols[(boardState/=3)%3] << ' ' <<  v << std::endl;
-  std::cout << h << h << h << h << m <<      h      <<      h      <<      h      << m <<      h      <<      h      <<      h      << m <<      h      <<      h      <<      h      <<  r << std::endl
-            <<      "2   "      << v << ' ' <<  symbols[(boardState/=3)%3];
-                                                                 std::cout << ' ' << v << ' ' <<  symbols[(boardState/=3)%3];
-                                                                                                                   std::cout << ' ' << v << ' ' <<  symbols[(boardState/=3)%3] << ' ' <<  v << std::endl;
-  std::cout << h << h << h << h << m <<      h      <<      h      <<      h      << m <<      h      <<      h      <<      h      << m <<      h      <<      h      <<      h      <<  r << std::endl
-            <<      "1   "      << v << ' ' <<  symbols[(boardState/=3)%3];
-                                                                 std::cout << ' ' << v << ' ' <<  symbols[(boardState/=3)%3];
-                                                                                                                   std::cout << ' ' << v << ' ' <<  symbols[(boardState/=3)%3] << ' ' <<  v << std::endl
-            << h << h << h << h << m <<      h      <<      h      <<      h      << m <<      h      <<      h      <<      h      << m <<      h      <<      h      <<      h      <<  r << std::endl
-            <<      "    "      << v <<                   "   "                   << v <<                   "   "                   << v <<                   "   "                   <<  v << std::endl
-            <<      "    "      << v <<                   " a "                   << v <<                   " b "                   << v <<                   " c "                   <<  v << std::endl
-            << std::endl;
+  std::println("════╦═══╦═══╦═══╗");
+  std::print("3   ║ {0}", symbols[boardState%3]);
+  std::print(" ║ {0}", symbols[(boardState/=3)%3]);
+  std::println(" ║ {0} ║", symbols[(boardState/=3)%3]);
+  std::println("════╬═══╬═══╬═══╣");
+  std::print("2   ║ {0}", symbols[(boardState/=3)%3]);
+  std::print(" ║ {0}", symbols[(boardState/=3)%3]);
+  std::println(" ║ {0} ║", symbols[(boardState/=3)%3]);
+  std::println("════╬═══╬═══╬═══╣");
+  std::print("1   ║ {0}", symbols[(boardState/=3)%3]);
+  std::print(" ║ {0}", symbols[(boardState/=3)%3]);
+  std::println(" ║ {0} ║", symbols[(boardState/=3)%3]);
+  std::println("════╬═══╬═══╬═══╣");
+  std::println("    ║   ║   ║   ║");
+  std::println("    ║ A ║ B ║ C ║\n");
 }
 
 std::string getPlayerMove(short boardState, std::string *names) {
