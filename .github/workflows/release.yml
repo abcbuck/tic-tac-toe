@@ -2,6 +2,11 @@ name: Compile and release for Windows, Linux and macOS
 
 on:
   workflow_dispatch:
+    inputs:
+     tag:
+       description: 'Release tag name'
+       required: true
+       type: string
 
 jobs:
   compile:
@@ -30,7 +35,7 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         name: Executables
-        tag_name: v1.0.0
+        tag_name: ${{ inputs.tag }}
         files: |
           ${{ needs.compile.outputs.project-name }}-Windows.7z
           ${{ needs.compile.outputs.project-name }}-Linux.7z
