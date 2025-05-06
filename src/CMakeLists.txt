@@ -4,7 +4,7 @@ project(TicTacToe CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-if(CMAKE_HOST_SYSTEM_NAME EQUAL Windows)
+if(${CMAKE_HOST_SYSTEM_NAME} STREQUAL Windows)
   add_compile_options(/utf-8)
 endif()
 
